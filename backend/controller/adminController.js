@@ -2,9 +2,10 @@ const bcrypt=require('bcrypt');
 const jwt=require('jsonwebtoken');
 const adminmodel=require('../models/adminModel');
 const Errorhandler = require('../utility/errorHandler');
-const subscriptionModel = require('../models/subscriptionModel');
+const subscriptionmodel=require('../models/subscriptionModel')
 const userModel = require('../models/userModel');
 const adminModel = require('../models/adminModel');
+const subscriptionModel = require('../models/subscriptionModel');
 const signup=async(req,res,next)=>{
     const {firstname,lastname,email,password,phone}=req.body;
    try{
@@ -65,13 +66,14 @@ const login=async(req,res,next)=>{
             })
         }
     }catch(error){
-        next(new Errorhandler(error.message,500))
+        next(new Errorhandler("internal server error",500))
     }
     
 
 }
 const createPlan=async(req,res,next)=>{
     const {token}=req.headers;
+    
     if(!token){
         return res.status(400).json({
             success:false,
@@ -79,26 +81,34 @@ const createPlan=async(req,res,next)=>{
         })
     }
     const {name,duration,price}=req.body
-    const decode=jwt.verify(token,'secret');
+    
+    
     try{
+        const decode=jwt.verify(token,'secret');
     const admin=await adminmodel.findOne({email:decode.email});
+    
     if(!admin){
+        
         return res.status(400).json({
             success:false,
             message:'login as admin'
         })
     }else{
-        const plan=await subscriptionModel.create({
+        
+        const plan=await subscriptionmodel.create({
             name,
             duration,
             price
         })
+        console.log(plan);
+        
+        
         res.json({
             success:true,
             message:'plan created successfully'
         })
     }}catch(error){
-        next(new Errorhandler(error.message,500))
+        next(new Errorhandler("internal server error",500))
     }
 }
 const allUser=async(req,res,next)=>{
@@ -181,5 +191,30 @@ const adminDetails=async(req,res,next)=>{
     }
     
 }
+const planDelete=async(req,res,next)=>{
+    const token=req.headers.token;
+    const decode=jwt.verify(token,'secret');
+    const email=decode.email;
+    const id=req.params.id
+    try {
+        const admin=await adminmodel.findOne({email});
+    if(!admin){
+        
+        res.status(404).json({
+            success:false,
+            message:"user not found"
+        })
+    }else{
+        const post=await subscriptionmodel.findOneAndDelete({_id:id})
+        res.json({
+            success:true,
+            message:"post deleted successfully"
+        })
+    }
+    } catch (error) {
+        next(new Errorhandler("internal server error",500))
+    }
+    
+}
 
-module.exports={login,signup,createPlan,allUser,deleteUser,adminDetails}
+module.exports={login,signup,createPlan,allUser,deleteUser,adminDetails,planDelete}

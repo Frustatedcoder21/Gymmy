@@ -21,8 +21,8 @@ app.listen(PORT,()=>{
     
 })
 app.use((err,req,res,next)=>{
-    res.status(err.statuscode).json({
+    res.status(err.statuscode||500).json({
         success:false,
-        message:err.message
+        message:err.message||"internal server error"
     })
     })

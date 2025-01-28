@@ -7,4 +7,5 @@ router.post('/createplan',adminController.createPlan)
 router.get('/alluser',adminController.allUser)
 router.get('/details',adminController.adminDetails)
 router.delete('/user/:id',adminController.deleteUser)
+router.delete('/plan/:id',adminController.planDelete)
 module.exports=router
