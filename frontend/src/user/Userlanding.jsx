@@ -14,7 +14,6 @@ const Userlanding = () => {
   const [passwordVisibility,setPasswordVisibility]=useState(false);
   const dispatch=useDispatch();
   const {is_Loading,is_Error,plan_data}=useSelector((state)=>state.plan)
-  console.log(plan_data)
   useEffect(()=>{
     dispatch(fetchDetails());
      dispatch(fetchPlan())
