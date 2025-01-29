@@ -36,7 +36,7 @@ const Adminlanding = () => {
      }
      allUserDetails();
     
-  },[dispatch])
+  },[])
   
    
 const deleteUser=async(id)=>{
@@ -146,38 +146,38 @@ if(response.ok){
   
   return (
     <div className='w-full min-h-screen md:h-full p-3  bg-gray-900 text-green-500'>
-      <p className='text-center text-3xl'>Welcome back Admin !!</p>
+      <p className='text-center text-3xl font-semibold'>Welcome Back Admin 😃 !!</p>
       <div className='w-full h-full grid grid-cols-12 items-center gap-3 '>
-      <div className='col-span-4 min-h-[50vh]  md:h-1/2 border-2 border-black'>
+      <div className='col-span-4 min-h-[50vh]  md:h-1/2   rounded-lg bg-gradient-to-r from-black to-gray-900'>
         <ul className='h-full flex flex-col justify-center items-center gap-3 text-xl text-center md:text-2xl break-all'>
-          <li onClick={()=>{
+          <li className='cursor-pointer hover:underline' onClick={()=>{
             handleVisibility(1)
           }}>Profile</li>
-          <li onClick={()=>{
+          <li  className='cursor-pointer hover:underline' onClick={()=>{
             handleVisibility(2)
           }}>Statistics</li>
-          <li onClick={()=>{
+          <li className='cursor-pointer hover:underline' onClick={()=>{
             handleVisibility(3)
           }}>Member Management</li>
-          <li onClick={()=>{
+          <li className='cursor-pointer hover:underline' onClick={()=>{
             handleVisibility(4)
           }}>Subscription Plan Management</li>
-          <li onClick={()=>{
+          <li className='cursor-pointer hover:underline' onClick={()=>{
             dispatch(logout());
             navigate('/')
           }}>Logout</li>
         </ul>
 
       </div>
-      <div className='col-span-8 min-h-[85vh] md:h-3/4 border-2 border-black '>
+      <div className='col-span-8 min-h-[85vh] md:h-3/4 border-2 border-black rounded-lg bg-gradient-to-r from-black to-gray-900 '>
 
         {profile &&   
-          <div className='profile w-full h-full '>
-          {data?<div>
-            <p>First Name:-{data.admin.firstname}</p>
-     <p>Last Name:-{data.admin.lastname}</p>
-     <p>Phone No:-{data.admin.phone}</p>
-     <p>Email:-{data.admin.email}</p>
+          <div className='profile w-full h-full text-2xl p-2 '>
+          {is_loading?<div>loading..</div>:data?<div>
+            <p><strong>First Name:-</strong>{data.admin.firstname}</p>
+     <p><strong>Last Name:-</strong>{data.admin.lastname}</p>
+     <p><strong>Phone Number:-</strong>{data.admin.phone}</p>
+     <p><strong>Email:-</strong>{data.admin.email}</p>
      </div>:<div>loading..</div>}
           </div>
            }
@@ -185,11 +185,27 @@ if(response.ok){
      
      
      { stat && <div className='stat w-full h-full'>
-       {userDetails?<div className='w-full h-full'>
-         <p>Total Users :-{userDetails.users.length}</p>
-         <p>Total Subscribed Users :-{userDetails.users.filter((user)=>user.membership.length>0).length}</p>
-         
-
+       {userDetails?<div className='w-full h-full p-3 text-center flex items-center flex-wrap'>
+        <div>
+         <p className='w-[150px] h-[90px] border-2 border-black bg-green-500 rounded-lg flex text-black justify-center items-center m-5'>Total Users :-{userDetails.users.length}</p>
+         <p className='w-[150px] h-[90px] border-2 bg-yellow-400 border-black rounded-lg flex  text-black justify-center items-center m-5'>Total Subscribed Users <span className='w-[10px] h-[10px] rounded-[50%] bg-green-500 '></span> :-{userDetails.users.filter((user)=>user.membership.length>0).length}</p>
+         <p className='w-[150px] h-[90px] border-2 bg-yellow-400 border-black rounded-lg flex  text-black justify-center items-center m-5'>Total Non-Subscribed Users  <span className='w-[10px] h-[10px] rounded-[50%] bg-red-500 '></span>:-{userDetails.users.length-userDetails.users.filter((user)=>user.membership.length>0).length} </p>
+         </div>
+         <div 
+  className=" w-[200px] h-[200px] md:w-[400px] md:h-[400px] rounded-full border-2 flex justify-center items-center" 
+  style={{
+    backgroundImage: `conic-gradient(
+      green ${((userDetails.users.filter(user => user.membership.length > 0).length) / userDetails.users.length) * 100}%,
+      red 0
+    )`
+  }}
+>
+          
+          <div className='w-[60%] h-[60%]  rounded-full border-2 bg-black'>
+        
+          </div>
+         </div>
+  
        </div>:<div>loading</div>}
       
       </div>}
@@ -259,9 +275,9 @@ if(response.ok){
       {is_Loading?<div>loading..</div>:
       plan_data?plan_data.plans.map((plan)=>{
         return <div className='w-full border-b-2 pl-5 py-2' key={plan._id}>
-          <p>Plan Name:- {plan.name}</p>
-          <p>Plan Duration :- {plan.duration}</p>
-          <p>Plan Price :-{plan.price}</p>
+          <p><strong>Plan Name :-</strong> {plan.name}</p>
+          <p><strong>Plan Duration :-</strong> {plan.duration}</p>
+          <p><strong>Plan Price :-</strong> {plan.price}</p>
           <button className='text-red-500 hover:underline' onClick={(e)=>{
             handleDelete(e,plan._id)
           }}>delete</button>

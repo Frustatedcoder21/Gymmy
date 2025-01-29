@@ -66,6 +66,30 @@ const Userlanding = () => {
 
     }
   }
+  const handleSubscribe=async(index)=>{
+    console.log(plan_data.plans[index]._id);
+    
+    const response=await fetch('http://localhost:4000/api/user/subscription',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+         'token':localStorage.getItem('token')
+      },
+      body:JSON.stringify({
+        subscribed:true,
+          subscription_id:plan_data.plans[index]._id
+          
+      })
+    })
+    if(response.ok){
+      window.location.reload();
+    }
+    const val=await response.json();
+    console.log(val);
+    
+    
+    
+  }
   return (
     <div className='w-full h-full bg-gradient-to-tr from-black to-gray-600 p-2 relative flex flex-col justify-center'>
       <p className='text-5xl font-bold text-green-500 absolute top-0'><Link to='/'>Gymmy</Link></p>
@@ -103,10 +127,12 @@ const Userlanding = () => {
           </div>:<div className='w-full'>
             <p className='text-center'>You haven't subscribed to any plan</p>
             <div className='w-full'>
-              <p className='text-center underline'>Plans we offer</p>
-              {is_Loading ?<p>loading..</p>:<Carousel autoPlay={true} stopOnHover={true} infiniteLoop showIndicators={false} showThumbs={false} className='w-full mt-1'>
+              <p className='text-center underline'>Plans we offer (click on any below plan to subscribe)</p>
+              {is_Loading ?<p>loading..</p>:<Carousel autoPlay={true} stopOnHover={true} infiniteLoop showIndicators={false} onClickItem={handleSubscribe} showThumbs={false} className='w-full mt-1'>
                 {plan_data.plans.map((plan)=>{
-                   return <div className='  bg-gradient-to-r from-black to-gray-900 rounded-lg' key={plan._id} >
+                   return <div className='  bg-gradient-to-r from-black to-gray-900 rounded-lg' key={plan._id}
+                  
+                    >
                     <p> Plan Name :{plan.name}</p>
                     <p>Plan Duration: {plan.duration} days</p>
                     <p>Price: {plan.price}</p>

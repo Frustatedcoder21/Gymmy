@@ -8,7 +8,7 @@ const adminRoutes=require('./routes/adminRoute')
 dotenv.config({path:'./config/.env'});
 connectDb();
 
-const PORT=process.env.PORT ||3000;
+const PORT=process.env.PORT || 3000;
 app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))

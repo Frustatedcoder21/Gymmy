@@ -3,7 +3,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 export const fetchPlan=createAsyncThunk('fetchPlan',async()=>{
     const response=await fetch('http://localhost:4000/api/user/plan/details');
     const data=await response.json();
-    console.log(data);
     
     return data
 })

@@ -104,7 +104,7 @@ if(!user){
         let currentdate=Date.now().toLocaleString();
         if(currentdate<enddate){
             user.membership.pop()
-            user.save();
+            await user.save();
         }
        if(user.membership.length==0 ||Date.now()>timestamp2) {
         user.membership.push({
@@ -114,7 +114,7 @@ if(!user){
             enddate
 
         })
-        user.save();
+        await user.save();
         res.json({
             success:true,
             message:'subscribed the plan'
