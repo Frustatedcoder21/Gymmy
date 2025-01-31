@@ -8,6 +8,7 @@ import Userlanding from './user/Userlanding'
 import Protectedu from './Protectedu'
 import Protecta from './Protecta'
 import Adminlanding from './admin/Adminlanding'
+import Store from './Store'
 const App = () => {
   return (
     <div className='w-screen h-screen   '>
@@ -19,6 +20,7 @@ const App = () => {
         <Route path='/user-type' element={<div className='w-full h-full'><Usertype /></div>} />
         <Route path='/user/landing' element={<div className='w-full h-full'><Protectedu><Userlanding /></Protectedu></div>} />
         <Route path='/admin/landing' element={<div className='w-full h-full'><Protecta><Adminlanding /></Protecta></div>} />
+        <Route path='/store' element={<div className='w-full h-full'><Store /></div>} />
       </Routes>
       </BrowserRouter>
     </div>

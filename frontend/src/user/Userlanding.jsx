@@ -99,11 +99,11 @@ const Userlanding = () => {
     <div className='w-full h-3/4 grid grid-cols-12 p-2 gap-3 '>
        <div className=' w-full h-full border-2 border-green-500 col-span-4 '>
         <ul className='w-full h-full flex flex-col justify-center items-center gap-3 text-xl md:text-2xl font-bold text-green-500 text-center break-all'>
-          <li onClick={()=>{handleVisibility(1)}} >Profile</li>
-          <li onClick={()=>{handleVisibility(2)}}>Membership & Details</li>
-          <li onClick={()=>{handleVisibility(3)}}>Change Password</li>
-          <li onClick={()=>{handleVisibility(4)}}>Help</li>
-          <li onClick={()=>{
+          <li className='cursor-pointer hover:underline' onClick={()=>{handleVisibility(1)}} >Profile</li>
+          <li onClick={()=>{handleVisibility(2)}} className='cursor-pointer hover:underline'>Membership & Details</li>
+          <li onClick={()=>{handleVisibility(3)}} className='cursor-pointer hover:underline'>Change Password</li>
+          <li onClick={()=>{handleVisibility(4)}} className='cursor-pointer hover:underline'>Help</li>
+          <li className='cursor-pointer hover:underline' onClick={()=>{
             dispatch(logout());
             navigate('/')
           }}>Logout</li>
@@ -111,12 +111,12 @@ const Userlanding = () => {
         </ul>
        </div>
        <div className='border-2 border-green-500 col-span-8'>
-       {profileVisibility && <div className=' profile text-xl h-full text-green-500 font-bold font-bigShoulder break-words flex flex-col justify-center items-start md:items-center pl-1'>
-          <p>First Name :- {data.user.firstname} </p>
-          <p>Last Name :- {data.user.lastname}</p>
-          <p>Email :- {data.user.email}</p>
-          <p>Phone No :- {data.user.phone}</p>
-          <p>Subscribed :- {data.user.membership.length?"Yes":"No"}</p>
+       {profileVisibility && <div className=' profile text-xl h-full text-green-500  break-words flex flex-col  pl-4 pt-5'>
+          <p><strong>First Name :- </strong> {data.user.firstname} </p>
+          <p><strong>Last Name :- </strong>{data.user.lastname}</p>
+          <p><strong>Email :- </strong>{data.user.email}</p>
+          <p><strong>Phone No :- </strong> {data.user.phone}</p>
+          <p><strong>Subscribed :- </strong> {data.user.membership.length?"Yes":"No"}</p>
         </div>}
         {membershipVisibility && <div className=' membership text-xl h-full text-green-500 font-bold font-bigShoulder break-words flex flex-col justify-center items-start md:items-center pl-1'>
           {data.user.membership.length?<div>
@@ -146,9 +146,15 @@ const Userlanding = () => {
         {passwordVisibility && <div className=' change password text-xl h-full text-green-500 font-bold font-bigShoulder break-words flex flex-col justify-center items-start md:items-center pl-1'>
           
         </div> }
-        <div>
-
-        </div>
+        {helpVisibility && <div className='w-full h-full'>
+          <p>FAQ'S (Frequently asked questions) </p>
+          <div className='w-full'>
+           <div>
+            <p>How do I sign in ? <span></span></p>
+           </div>
+          </div>
+          
+          </div>}
        </div>
        <div></div>
       </div>

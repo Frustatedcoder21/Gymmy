@@ -4,7 +4,8 @@ const usermodel=require('../models/userModel')
 const subscriptionmodel=require('../models/subscriptionModel')
 const Errorhandler = require('../utility/errorHandler');
 const subscriptionModel = require('../models/subscriptionModel');
-const nodemailer=require('nodemailer')
+const storemodel=require('../models/storeModel')
+const nodemailer=require('nodemailer');
 const signup=async(req,res,next)=>{
     const {firstname,lastname,email,password,phone}=req.body;
    try{
@@ -205,5 +206,78 @@ const planDetails=async(req,res,next)=>{
     }
     
 }
+const showItems=async(req,res,next)=>{
+    try {
+        
+const items=await storemodel.find();
+if(items){
+    res.json({
+        success:true,
+        items
+    })
+}else{
+    res.status(400).json({
+        success:false,
+        message:"bad request"
+    })
+}
 
-module.exports={signup,login,subscription,forgotPassword,userDetails,planDetails}
+    } catch (error) {
+        next(new Errorhandler("internal server error",500))
+    }
+}
+const addToCart=async(req,res,next)=>{
+    const token=req.headers.token;
+    
+    const {product,quantity}=req.body
+    try {
+        const decode=jwt.verify(token,'secret');
+    const email=decode.email;
+    const user=await usermodel.findOne({email});
+    const thing=await storemodel.findOne({_id:product})
+    
+    
+    if(!user){
+        res.status(400).json({
+            success:false,
+            message:"user need to login"
+        })
+    }else{
+        if(!thing){
+            return res.status(404).json({
+                success:false,
+                message:"product not found"
+            })
+        }else{
+            if(quantity>10){
+                res.status(400).json({
+                    success:false,
+                    message:"cart limit exceed (max quantity:10)"
+                })
+            }else{
+                const item={   
+
+                    product,
+                    quantity
+                }
+                user.cart.push(item);
+                await user.save();
+                thing.stock=thing.stock-quantity;
+                await thing.save();
+                res.json({
+                    success:true,
+                    message:"added to cart successfully"
+                })
+            }
+        }
+       
+    }
+    } catch (error) {
+        next(new Errorhandler("internal server error",500))
+    }
+  
+    
+    
+}
+
+module.exports={signup,login,subscription,forgotPassword,userDetails,planDetails,showItems,addToCart}

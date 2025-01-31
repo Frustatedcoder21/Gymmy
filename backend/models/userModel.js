@@ -41,6 +41,16 @@ const userSchema=mongoose.Schema({
     }
 ],
         default:[]
+    },
+    cart:{
+        type:[{
+         product:{
+           type:mongoose.Schema.Types.ObjectId,
+           ref:'store'
+         },
+         quantity:Number        
+        }],
+        default:[]
     }
 },{timestamps:true})
 

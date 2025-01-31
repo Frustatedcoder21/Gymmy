@@ -6,6 +6,7 @@ const subscriptionmodel=require('../models/subscriptionModel')
 const userModel = require('../models/userModel');
 const adminModel = require('../models/adminModel');
 const subscriptionModel = require('../models/subscriptionModel');
+const storeModel=require('../models/storeModel')
 const signup=async(req,res,next)=>{
     const {firstname,lastname,email,password,phone}=req.body;
    try{
@@ -216,5 +217,84 @@ const planDelete=async(req,res,next)=>{
     }
     
 }
+const createItem=async(req,res,next)=>{
+    const token=req.headers.token;
+    const {name,stock,price}=req.body
+    try {
+        const decode=jwt.verify(token,'secret');
+    const email=decode.email;
+    const admin=await adminModel.findOne({email});
+    if(!admin){
+        res.status(400).json({
+            success:false,
+            message:"login as admin"
+        })
+    }else{
+        const item=await storeModel.create({
+          name,
+          stock,
+          price
+        })
+        res.json({
+            success:true,
+            message:"item created successfully"
+        })
+    }
+    } catch (error) {
+        next(new Errorhandler("internal server error",500))
+    }
+    
+}
+const itemUpdate=async(req,res,next)=>{
+    const token=req.headers.token;
+    const id=req.params.id //product id
+    const {name,stock,price}=req.body
+    try {
+        const decode=jwt.verify(token,'secret');
+    const email=decode.email;
+    const admin=await adminModel.findOne({email});
+    if(!admin){
+        res.status(400).json({
+            success:false,
+            message:"login as admin"
+        })
+    }else{
+        const item=await storeModel.findOneAndUpdate({_id:id},{
+          name,
+          stock,
+          price
+        })
+        res.json({
+            success:true,
+            message:"item update successfully"
+        })
+    }
+    } catch (error) {
+        next(new Errorhandler("internal server error",500))
+    }
+}
+const itemDelete=async(req,res,next)=>{
+    const token=req.headers.token;
+    const id=req.params.id //product id
+    try {
+        const decode=jwt.verify(token,'secret');
+    const email=decode.email;
+    const admin=await adminModel.findOne({email});
+    if(!admin){
+        res.status(400).json({
+            success:false,
+            message:"login as admin"
+        })
+    }else{
+        const item=await storeModel.findOneAndDelete({_id:id}) 
+        res.json({
+            success:true,
+            message:"item deleted successfully"
+        })
+    }
+    } catch (error) {
+        next(new Errorhandler(error.message,500))
+    }
+}
 
-module.exports={login,signup,createPlan,allUser,deleteUser,adminDetails,planDelete}
+module.exports={login,signup,createPlan,allUser,deleteUser,adminDetails,planDelete,createItem,itemUpdate,itemDelete}
