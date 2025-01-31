@@ -50,7 +50,7 @@ const Mainstore = () => {
       >
         <img src="bag.svg" className="bag w-[200px] h-[200px]" alt="Bag" />
         <p className="text-4xl text-center font-semibold text-green-500">
-          <Link to="">Click to visit</Link>
+          <Link to="/store">Click to visit</Link>
         </p>
       </div>
     </div>
